@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { pageNumber } from './form-handler';
 export { fetchPhotoes, searchTermin };
 //constants
 const BASE_URL =
@@ -8,7 +7,6 @@ const API_KEY = '31974365-341749123fa485f09eb8b1d6d';
 
 //variables
 
-let searchTermin = '';
 //functions
 async function fetchPhotoes(searchTermin, pageNumber) {
   const response = await axios.get(
