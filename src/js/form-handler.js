@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix';
-import { pageNumber, fetchPhotoes } from './pixabay-api';
+
 import { galleryElemnt, renderInterface, loader } from './gallery';
 export { totalPagesCount };
 
@@ -34,3 +34,5 @@ async function formSearchHandler(event) {
   form.reset();
   loader.classList.add('hidden');
 }
+
+import { pageNumber, fetchPhotoes } from './pixabay-api';
