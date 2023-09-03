@@ -14,7 +14,7 @@ form.addEventListener('submit', formSearchHandler);
 //functions
 async function formSearchHandler(event) {
   event.preventDefault();
-  pageNumber++;
+  pageNumber = 1;
   searchTermin = form.searchQuery.value;
   galleryElemnt.innerHTML = '';
   loader.classList.remove('hidden');
