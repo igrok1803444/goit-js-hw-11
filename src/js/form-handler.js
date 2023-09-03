@@ -1,4 +1,4 @@
-import { pageNumber, fetchPhotoes } from './pixabay-api';
+import { fetchPhotoes } from './pixabay-api';
 import { Notify } from 'notiflix';
 import { galleryElemnt, renderInterface, loader } from './gallery';
 export { totalPagesCount };
