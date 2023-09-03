@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix';
-import { fetchPhotoes, searchTermin } from './pixabay-api';
+// import { fetchPhotoes, searchTermin } from './pixabay-api';
 import { galleryElemnt, renderInterface, loader } from './gallery';
 export { totalPagesCount, pageNumber };
 
