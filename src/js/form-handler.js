@@ -8,7 +8,7 @@ const form = document.querySelector('.search-form');
 let totalPagesCount = 0;
 //handlers
 form.addEventListener('submit', formSearchHandler);
-
+import { pageNumber, fetchPhotoes } from './pixabay-api';
 //functions
 async function formSearchHandler(event) {
   event.preventDefault();
@@ -34,5 +34,3 @@ async function formSearchHandler(event) {
   form.reset();
   loader.classList.add('hidden');
 }
-
-import { pageNumber, fetchPhotoes } from './pixabay-api';
