@@ -1,22 +1,37 @@
 import { Notify } from 'notiflix';
 import { fetchPhotoes } from './pixabay-api';
 import { galleryElemnt, renderInterface, loader } from './gallery';
-export { totalPagesCount, pageNumber };
+export { totalPagesCount, pageNumber, galleryObserver };
 
 const form = document.querySelector('.search-form');
 //variables
 let searchTermin = '';
 let totalPagesCount = 0;
 let pageNumber = 0;
+let observerOptions = {
+  rootMargin: '300px',
+  threshold: 0,
+};
+const galleryObserver = new IntersectionObserver(
+  loadMorePhotoes,
+  observerOptions
+);
+
 //handlers
 form.addEventListener('submit', formSearchHandler);
 
 //functions
 async function formSearchHandler(event) {
   event.preventDefault();
+  galleryObserver.unobserve(document.querySelector('.observe-target'));
   pageNumber = 1;
+  if (form.searchQuery.value.trim() === '') {
+    Notify.failure('Please enter any word!');
+    return;
+  }
+
   searchTermin = form.searchQuery.value;
-  galleryElemnt.innerHTML = '';
+  galleryElemnt.innerHTML = ' ';
   loader.classList.remove('hidden');
   try {
     const { totalHits, hits } = await fetchPhotoes(searchTermin, pageNumber);
@@ -29,30 +44,33 @@ async function formSearchHandler(event) {
       Notify.success(`Hooray! We found ${totalHits} images.`);
     }
 
-    await renderInterface(hits);
+    renderInterface(hits);
   } catch (error) {
     Notify.failure('Error! Please reload page!');
   }
-  pageNumber++;
+
   form.reset();
   loader.classList.add('hidden');
+  setTimeout(() => {
+    galleryObserver.observe(document.querySelector('.observe-target'));
+  }, 1000);
 }
-window.addEventListener('scroll', loadMorePhotoes);
-async function loadMorePhotoes() {
-  const galleryRect = galleryElemnt.getBoundingClientRect();
 
-  if (galleryRect.bottom <= 1000) {
+async function loadMorePhotoes(entry) {
+  console.log(entry[0].isIntersecting, entry);
+  if (entry[0].isIntersecting === true) {
+    pageNumber++;
     if (pageNumber === totalPagesCount + 1) {
+      galleryObserver.unobserve(document.querySelector('.observe-target'));
       return;
     }
     loader.classList.remove('hidden');
     try {
       const { hits } = await fetchPhotoes(searchTermin, pageNumber);
-      await renderInterface(hits);
-      pageNumber++;
+      renderInterface(hits);
     } catch (error) {
       Notify.failure('Error! Please reload page!');
     }
+    loader.classList.add('hidden');
   }
-  loader.classList.add('hidden');
 }

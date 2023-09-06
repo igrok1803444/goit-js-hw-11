@@ -1,8 +1,7 @@
 //imports
-import { totalPagesCount, pageNumber } from './form-handler';
+import { galleryObserver } from './form-handler';
 import simpleLightbox from 'simplelightbox';
-import { fetchPhotoes } from './pixabay-api';
-import { Notify } from 'notiflix';
+
 //exports
 export { galleryElemnt, loader, renderInterface };
 //DOM navigation
@@ -12,9 +11,12 @@ const gallery = new simpleLightbox('.gallery a', {
   captionsData: 'alt',
 });
 //listeners
-
+document.addEventListener('DOMContentLoaded', () => {
+  const headerHeight = document.querySelector('.header').clientHeight;
+  document.body.style.paddingTop = `${headerHeight}px`;
+});
 //functions
-async function renderInterface(photoesArray) {
+function renderInterface(photoesArray) {
   const markup = photoesArray
     .map(
       ({
@@ -27,23 +29,23 @@ async function renderInterface(photoesArray) {
         downloads,
       }) => {
         return `<div class="photo-card">
-  <a  href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+  <a  href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" height="300" width="100%"/></a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>
-      ${likes}
+      <span>${likes}</span>
     </p>
     <p class="info-item">
       <b>Views</b>
-      ${views}
+      <span>${views}</span>
     </p>
     <p class="info-item">
       <b>Comments</b>
-      ${comments}
+      <span>${comments}</span>
     </p>
     <p class="info-item">
       <b>Downloads</b>
-      ${downloads}
+      <span>${downloads}</span>
     </p>
   </div>
 </div>`;
@@ -53,21 +55,3 @@ async function renderInterface(photoesArray) {
   galleryElemnt.insertAdjacentHTML('beforeend', markup);
   gallery.refresh();
 }
-// async function loadMorePhotoes() {
-//   const galleryRect = galleryElemnt.getBoundingClientRect();
-
-//   if (galleryRect.bottom <= 1000) {
-//     if (pageNumber === totalPagesCount + 1) {
-//       return;
-//     }
-//     loader.classList.remove('hidden');
-//     try {
-//       const { hits } = await fetchPhotoes(searchTermin, pageNumber);
-//       await renderInterface(hits);
-//     } catch (error) {
-//       Notify.failure('Error! Please reload page!');
-//     }
-//   }
-//   loader.classList.add('hidden');
-//   pageNumber++;
-// }
