@@ -1,5 +1,5 @@
 //imports
-import { galleryObserver } from './form-handler';
+
 import simpleLightbox from 'simplelightbox';
 
 //exports
